@@ -1,0 +1,55 @@
+##########################
+# Useful Links
+#
+# http://forum.kodi.tv/showthread.php?tid=230035
+# https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=108209&p=940216#p940216
+#
+##########################
+
+#
+## Kodi Start
+#
+
+# Edit  /etc/default/kodi
+
+vim /etc/default/kodi
+
+# Change "ENABLED=0" to "ENABLED=1"
+# Change user from 'kodi' to 'pi' if it's not already configured as such
+
+# Run kodi service to start and test
+sudo service kodi start
+
+
+#
+## Kodi Shut Down
+#
+
+# Create a file in, /var/lib/polkit-1/localauthority/50-local.d/ called "50-kodi.pkla"
+
+sudo vim /var/lib/polkit-1/localauthority/50-local.d/50-kodi.pkla
+
+# Paste the following into the file
+[Actions for kodi user]
+Identity=unix-user:kodi
+Action=Action=org.freedesktop.upower.*;org.freedesktop.consolekit.system.*;org.f?reedesktop.udisks.*
+ResultActive=yes
+ResultAny=yes
+ResultInactive=no
+
+# Save the file and set the owner and group to root
+
+sudo chown root:root /var/lib/polkit-1/localauthority/50-local.d/50-kodi.pkla
+
+# Set Permissions
+
+sudo chmod 0644 /var/lib/polkit-1/localauthority/50-local.d/50-kodi.pkla
+
+# Install Console Kit
+
+sudo apt-get install consolekit
+
+# Reboot
+
+reboot
+
